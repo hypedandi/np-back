@@ -32,7 +32,7 @@ pipeline {
                 script {
                   // Prepare basic image for application
                   dockerTag = "${env.BUILD_ID}.${env.GIT_COMMIT.take(7)}"
-                  applicationImage = docker.build("kornzysiek/backend:$dockerTag",".")
+                  applicationImage = docker.build("piechnikdaniel/backend:$dockerTag",".")
                 }
             }
         }
@@ -48,13 +48,7 @@ pipeline {
         }
     }
     post {
-        success {
-            build job: 'selenium', 
-                  parameters: [
-                      string(name: 'backendDockerTag', value: dockerTag)
-                  ],
-                  wait: false
-        }
+        
         always {
             junit testResults: "test-results/*.xml"
             cleanWs()
